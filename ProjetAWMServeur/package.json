@@ -1,0 +1,17 @@
+{
+    "name": "ProjetAWMServeur",
+    "version": "1.0.0",
+    "keywords": ["util", "functional", "server", "client", "browser"],
+    "author": "ageri",
+    "contributors": [],
+    "dependencies": {
+    "express": "^4.14.1",
+    "express-session": "^1.15.1",
+    "mustache-express": "^1.2.4",
+    "pg-promise": "^5.5.6",
+    "socket.io": "^1.7.3"
+  },
+  "scripts": {
+    "start": "node main.js"
+  }
+}
