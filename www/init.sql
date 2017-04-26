@@ -53,7 +53,7 @@ ALTER TABLE utilisateurs OWNER TO martinpj;
 -- Data for Name: fonctions; Type: TABLE DATA; Schema: public; Owner: reignier
 --
 
-INSERT INTO utilisateurs (username, nom, prenom, numero, localisation) VALUES ('JoelMP', 'Martin-Prevel', 'Joel', '0682071261', ST_GeographyFromText('SRID=4326;POINT(-110 30)') );
+INSERT INTO utilisateurs (username, nom, prenom, numero, localisation) VALUES ('JoelMP', 'Martin-Prevel', 'Joel', '0682071261', ST_GeomFromText('POINT(0 0)', 26910) );
 
 --COPY Utilisateurs (username, nom, prenom, numero, localisation) FROM stdin;
 --JoelMP 	Martin-prevel	Joel	0682071261	
