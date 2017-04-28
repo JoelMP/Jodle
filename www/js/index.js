@@ -42,7 +42,20 @@ function showConnection() {
             check[e.target.id](e.target.id); // "e.target" représente l'input actuellement modifié
         });
     }
-    document.getElementById('userConnection').onclick= userConnection;
+    document.getElementById('userConnection').addEventListener("click", function(event){
+        var result = true;
+        result = check['numero']('numero') && result;
+        result = result && isUser(document.getElementById('numero').value);
+        if (result) {
+            alert('Connection en cours');
+            document.location.href="mainpage.html";
+        }
+        else {
+            alert('Numero inconnu');
+            showConnection();
+        }
+        event.preventDefault()
+    });
     deactivateTooltips();
 }
 
@@ -68,34 +81,32 @@ function showInscription() {
             check[e.target.id](e.target.id); // "e.target" représente l'input actuellement modifié
         });
     }
-    document.getElementById('userInscription').onclick= userInscription;
+    document.getElementById('userInscription').addEventListener("click", function(event){
+        var result = true;
+        for (var i in check) {
+            result = check[i](i) && result;
+        }
+        if (result) {
+            alert('Inscription en cours');
+        }
+        else {
+            alert('Erreur dans le formulaire');
+            showInscription();
+        }
+    });
     deactivateTooltips();
 }
 
-function userInscription(){
-    var result = true;
-    for (var i in check) {
-        result = check[i](i) && result;
-    }
-    if (result) {
-        alert('Inscription en cours');
-    }
-    else {
-        alert('Erreur dans le formulaire');
-        showInscription();
-    }
-}
-
-function userConnection(){
-    var result = true;
-    result = check['numero']('numero') && result;
-    if (result) {
-        alert('Connection en cours');
-    }
-    else {
-        alert('Numero inconnu');
-        showConnection();
-    }
+function isUser(value) {
+    /*$.ajax({
+        url : '/api/utilisateur/' + value,
+        type : 'GET',
+        dataType : 'json',
+        success : function(data, statut){
+            return true;
+        }
+    });*/
+    return true;
 }
 
 // Fonction de désactivation de l'affichage des "tooltips"
