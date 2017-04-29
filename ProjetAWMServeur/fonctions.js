@@ -13,6 +13,7 @@ function addUser(req, res) {
          if (error == null)
          {
              res.status(200);
+             console.log(data);
          }
          else
          {
@@ -24,13 +25,18 @@ function addUser(req, res) {
 
 function getUser(req, res) {
     
-    var numero = req.body.numero;
-    db.getUser(numero, function(error, data) {
+    const id = req.params.id;
+    
+    db.getUser(id, function(error, data) {
         if (error == null) {
-            res.status(200);
+            res.status(200).json({
+                username : data.username,
+                nom : data.nom,            
+                prenom : data.prenom,            
+                numero : data.numero            
+            })
         } else {
-            console.log(error);
-            res.status(500).send(error);
+            res.status(500).send("Erreur : " + error);
         }
     })
 }
@@ -44,4 +50,12 @@ function addConnectedUser(numero, socket) {
             console.log(error);
         }
     })
+    console.log(numero);
+}
+
+
+module.exports = {
+    addUser,
+    getUser,
+    addConnectedUser
 }
