@@ -20,6 +20,11 @@
 // Application Constructor
 document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
 var check={};
+
+
+var socket = io.connect('http://130.190.111.64:8080');
+socket.emit('nouvelle_connexion', numero);
+
 // deviceready Event Handler
 //
 // Bind any cordova events here. Common events are:
