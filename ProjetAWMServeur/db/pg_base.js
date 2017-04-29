@@ -5,7 +5,7 @@ var db = pgp(dbconfig);
 
 function getUser(contact, callback)
 {
-    var requete = `select username, nom, prenom, numero, localisation from www.utilisateurs where numero = ${contact}`;
+    var requete = `select username, nom, prenom, numero, localisation from utilisateurs where numero = ${contact}`;
     console.log(requete);
     
     db.any(requete, null)
@@ -45,7 +45,7 @@ function addConnectedUser(numero, socket, callback)
             .catch(function(error)  {
                 callback(error, null);
     })    
-};
+}
 
 
 function deleteConnectedUser(numero, callback)
@@ -99,4 +99,4 @@ module.exports = {
     addMessage,
     deleteConnectedUser,
     deleteMessage
-}
+};

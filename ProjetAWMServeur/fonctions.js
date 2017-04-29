@@ -23,7 +23,7 @@ function addUser(req, res) {
 }
 
 function getUser(req, res) {
-    
+    console.log('oui');
     var numero = req.body.numero;
     db.getUser(numero, function(error, data) {
         if (error == null) {
@@ -45,3 +45,8 @@ function addConnectedUser(numero, socket) {
         }
     })
 }
+
+module.exports = {
+    getUser,
+    addUser
+};
