@@ -22,8 +22,8 @@ document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
 var check={};
 
 
-var socket = io.connect('http://130.190.111.64:8080');
-socket.emit('nouvelle_connexion', numero);
+var socket = io.connect('http://129.88.57.57:8080');
+socket.emit('nouvelle_connexion', 5);
 
 // deviceready Event Handler
 //
