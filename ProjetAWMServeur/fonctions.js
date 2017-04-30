@@ -29,6 +29,7 @@ function getUser(req, res) {
 
     db.getUser(id, function(error, data) {
         if (error == null) {
+            console.log(data);
             res.status(200).json({
                 username : data.username,
                 nom : data.nom,

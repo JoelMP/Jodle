@@ -3,7 +3,8 @@ var app = express(); // creation du serveur
 var server = require('http').createServer(app);
 var bodyParser = require('body-parser')  // envoie des paramètres en POST
 var router = require('./routes/routes');
-var fonctions = require('./fonctions')
+var fonctions = require('./fonctions');
+
 
 
 app.use(bodyParser.urlencoded({     // pour gérer les URL-encoded bodies (envoie formulaire en POST)
