@@ -66,7 +66,7 @@ function showConnection() {
 
 function isUser(value) {
     $.ajax({
-        url : '/api/utilisateur/' + value,
+        url : 'http://localhost:8080/api/utilisateur/' + value,
         type : 'GET',
         dataType : 'json',
         success : function(data, statut){
