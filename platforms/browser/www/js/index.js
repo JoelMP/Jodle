@@ -22,8 +22,8 @@ document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
 var check={};
 
 
-var socket = io.connect('http://129.88.57.57:8080');
-socket.emit('nouvelle_connexion', 5);
+//var socket = io.connect('http://129.88.57.70:8080');
+//socket.emit('nouvelle_connexion', 5);
 
 // deviceready Event Handler
 //
@@ -64,6 +64,20 @@ function showConnection() {
     deactivateTooltips();
 }
 
+function isUser(value) {
+    $.ajax({
+        url : '/api/utilisateur/' + value,
+        type : 'GET',
+        dataType : 'json',
+        success : function(data, statut){
+            alert(data);
+            alert(statut);
+            return true;
+        }
+    });
+    return false;
+}
+
 function showInscription() {
     document.getElementById('myForm').innerHTML =
         '<label class="form_col" for="numero">Numero :</label>'
@@ -86,32 +100,59 @@ function showInscription() {
             check[e.target.id](e.target.id); // "e.target" représente l'input actuellement modifié
         });
     }
-    document.getElementById('userInscription').addEventListener("click", function(event){
+    document.getElementsByClassName('form_col').addEventListener("submit", function(event){
         var result = true;
         for (var i in check) {
             result = check[i](i) && result;
         }
         if (result) {
             alert('Inscription en cours');
+            $.ajax({
+                url : '/api/utilisateur/',
+                type : 'POST',
+                dataType : 'json',
+                contentType: 'application/x-www-form-urlencoded',
+                success : function(data, statut){
+                    console.log("ouverture de la socket");
+                    var socket = io.connect('http://129.88.57.70:8080');
+                    socket.emit('nouvelle_connexion', 0614021053);
+                    return true;
+                }
+            });
+            $(this).serialize()
         }
         else {
             alert('Erreur dans le formulaire');
             showInscription();
         }
+        event.preventDefault();
     });
-    deactivateTooltips();
-}
-
-function isUser(value) {
-    /*$.ajax({
-        url : '/api/utilisateur/' + value,
-        type : 'GET',
-        dataType : 'json',
-        success : function(data, statut){
-            return true;
+    /*document.getElementById('userInscription').addEventListener("submit", function(event){
+        var result = true;
+        for (var i in check) {
+            result = check[i](i) && result;
         }
+        if (result) {
+            alert('Inscription en cours');
+            $.ajax({
+                url : '/api/utilisateur/',
+                type : 'POST',
+                dataType : 'json',
+                contentType: 'application/x-www-form-urlencoded',
+                success : function(data, statut){
+                    return true;
+                }
+            });
+            $(this).serialize()
+            inscription();
+        }
+        else {
+            alert('Erreur dans le formulaire');
+            showInscription();
+        }
+        event.preventDefault();
     });*/
-    return true;
+    deactivateTooltips();
 }
 
 // Fonction de désactivation de l'affichage des "tooltips"

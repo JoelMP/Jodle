@@ -22,8 +22,8 @@ document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
 var check={};
 
 
-var socket = io.connect('http://129.88.57.57:8080');
-socket.emit('nouvelle_connexion', 5);
+//var socket = io.connect('http://129.88.57.70:8080');
+//socket.emit('nouvelle_connexion', 5);
 
 // deviceready Event Handler
 //
@@ -113,6 +113,9 @@ function showInscription() {
                 dataType : 'json',
                 contentType: 'application/x-www-form-urlencoded',
                 success : function(data, statut){
+                    console.log("ouverture de la socket");
+                    var socket = io.connect('http://129.88.57.70:8080');
+                    socket.emit('nouvelle_connexion', 0614021053);
                     return true;
                 }
             });
