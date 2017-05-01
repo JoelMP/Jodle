@@ -3,9 +3,9 @@
 var settings = {
     host: 'ensibd.imag.fr',
     port: 5432,
-    database: 'martinpj',
-    user: 'martinpj',
-    password: 'martinpj'
+    database: 'gerignea',
+    user: 'gerignea',
+    password: 'gerignea'
 };
 
 module.exports = {

@@ -10,13 +10,14 @@ function addUser(req, res) {
     
     db.addUser(username, nom, prenom, numero, localisation, function(error,data)
      {
-         if (error == null)
+         if (error === null)
          {
-             res.status(200);
-             console.log(data);
+             console.log('success');
+             res.status(200).send("ok");
          }
          else
          {
+             console.log('error');
              console.log(error);
              res.status(500).send(error);
          }

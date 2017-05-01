@@ -20,7 +20,7 @@ function getUser(contact, callback)
 
 function addUser(username, nom, prenom, numero, localisation, callback)
 {
-    var requete = `INSERT INTO utilisateurs VALUES (${username}, ${nom}, ${prenom}, ${numero}, ${localisation})`;
+    var requete = `INSERT INTO utilisateurs VALUES ('${username}', '${nom}', '${prenom}', '${numero}', ST_GeomFromText('POINT(0 0)', 26910))`;
     console.log("nouvel utilisateur : " + requete);
     
     db.none(requete, null)
@@ -35,7 +35,7 @@ function addUser(username, nom, prenom, numero, localisation, callback)
 
 function addConnectedUser(numero, socket, callback)
 {
-    var requete = `INSERT INTO connexions VALUES (${numero}, ${socket})`;
+    var requete = `INSERT INTO connexions VALUES ('${numero}', '${socket}')`;
     console.log("nouvelle connexion : " + requete);
     
     db.none(requete, null)
