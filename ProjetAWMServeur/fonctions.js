@@ -17,7 +17,7 @@ function addUser(req, res) {
          }
          else
          {
-             console.log(error);
+             console.log("erreur add user : " + error);
              res.status(500).send(error);
          }
     })
