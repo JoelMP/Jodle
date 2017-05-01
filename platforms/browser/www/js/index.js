@@ -22,8 +22,8 @@ document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
 var check={};
 
 
-//var socket = io.connect('http://129.88.57.70:8080');
-//socket.emit('nouvelle_connexion', 5);
+var socket = io.connect('http://129.88.57.70:8080');
+socket.emit('nouvelle_connexion', 5);
 
 // deviceready Event Handler
 //
@@ -66,7 +66,7 @@ function showConnection() {
 
 function isUser(value) {
     $.ajax({
-        url : '/api/utilisateur/' + value,
+        url : 'http://localhost:8080/api/utilisateur/' + value,
         type : 'GET',
         dataType : 'json',
         success : function(data, statut){
@@ -108,7 +108,7 @@ function showInscription() {
         if (result) {
             alert('Inscription en cours');
             $.ajax({
-                url : '/api/utilisateur/',
+                url : 'http://129.88.57.70:8080/api/utilisateur/',
                 type : 'POST',
                 dataType : 'json',
                 contentType: 'application/x-www-form-urlencoded',
