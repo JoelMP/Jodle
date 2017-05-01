@@ -19,7 +19,10 @@
 
 // Application Constructor
 document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
-var check = {};
+var check={};
+
+
+
 // deviceready Event Handler
 //
 // Bind any cordova events here. Common events are:
@@ -37,14 +40,40 @@ function showConnection() {
         + '<span class="form_col"></span> <input type="submit" id="userConnection" value="Connection" />';
     var inputs = document.querySelectorAll('input[type=text], input[type=password]'),
         inputsLength = inputs.length;
-    check = {};
     for (var i = 0; i < inputsLength; i++) {
         inputs[i].addEventListener('keyup', function (e) {
             check[e.target.id](e.target.id); // "e.target" représente l'input actuellement modifié
         });
     }
-    document.getElementById('userConnection').onclick= userConnection;
+    document.getElementById('userConnection').addEventListener("click", function(event){
+        var result = true;
+        result = check['numero']('numero') && result;
+        result = result && isUser(document.getElementById('numero').value);
+        if (result) {
+            alert('Connection en cours');
+            document.location.href="mainpage.html";
+        }
+        else {
+            alert('Numero inconnu');
+            showConnection();
+        }
+        event.preventDefault()
+    });
     deactivateTooltips();
+}
+
+function isUser(value) {
+    $.ajax({
+        url : 'http://localhost:8080/api/utilisateur/' + value,
+        type : 'GET',
+        dataType : 'json',
+        success : function(data, statut){
+            alert(data);
+            alert(statut);
+            return true;
+        }
+    });
+    return false;
 }
 
 function showInscription() {
@@ -64,40 +93,64 @@ function showInscription() {
         + '<span class="form_col"></span> <input type="submit" id="userInscription" value="Inscription" />';
     var inputs = document.querySelectorAll('input[type=text], input[type=password]'),
         inputsLength = inputs.length;
-    check = {};
     for (var i = 0; i < inputsLength; i++) {
         inputs[i].addEventListener('keyup', function (e) {
             check[e.target.id](e.target.id); // "e.target" représente l'input actuellement modifié
         });
     }
-    document.getElementById('userInscription').onclick= userInscription;
+    document.getElementById('userInscription').addEventListener("click", function(event){
+        var result = true;
+        for (var i in check) {
+            result = check[i](i) && result;
+        }
+        if (result) {
+            alert('Inscription en cours');
+            $.ajax({
+                url : 'http://129.88.57.61:8080/api/utilisateur/',
+                type : 'POST',
+                dataType : 'json',
+                contentType: 'application/x-www-form-urlencoded',
+                success : function(data, statut){
+                    console.log("ouverture de la socket");
+                    var socket = io.connect('http://129.88.57.61:8080');
+                    socket.emit('nouvelle_connexion', 0614021053);
+                    return true;
+                }
+            });
+            $(this).serialize()
+        }
+        else {
+            alert('Erreur dans le formulaire');
+            showInscription();
+        }
+        event.preventDefault();
+    });
+    /*document.getElementById('userInscription').addEventListener("submit", function(event){
+        var result = true;
+        for (var i in check) {
+            result = check[i](i) && result;
+        }
+        if (result) {
+            alert('Inscription en cours');
+            $.ajax({
+                url : '/api/utilisateur/',
+                type : 'POST',
+                dataType : 'json',
+                contentType: 'application/x-www-form-urlencoded',
+                success : function(data, statut){
+                    return true;
+                }
+            });
+            $(this).serialize()
+            inscription();
+        }
+        else {
+            alert('Erreur dans le formulaire');
+            showInscription();
+        }
+        event.preventDefault();
+    });*/
     deactivateTooltips();
-}
-
-function userInscription(){
-    var result = true;
-    for (var i in check) {
-        result = check[i](i) && result;
-    }
-    if (result) {
-        alert('Inscription en cours');
-    }
-    else {
-        alert('Erreur dans le formulaire');
-    }
-}
-
-function userConnection(){
-    var result = true;
-    for (var i in check) {
-        result = check[i](i) && result;
-    }
-    if (result) {
-        alert('Connection en cours');
-    }
-    else {
-        alert('Numéro inconnu');
-    }
 }
 
 // Fonction de désactivation de l'affichage des "tooltips"

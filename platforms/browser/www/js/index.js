@@ -22,8 +22,6 @@ document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
 var check={};
 
 
-var socket = io.connect('http://129.88.57.70:8080');
-socket.emit('nouvelle_connexion', 5);
 
 // deviceready Event Handler
 //
@@ -100,7 +98,7 @@ function showInscription() {
             check[e.target.id](e.target.id); // "e.target" représente l'input actuellement modifié
         });
     }
-    document.getElementsByClassName('form_col').addEventListener("submit", function(event){
+    document.getElementById('userInscription').addEventListener("click", function(event){
         var result = true;
         for (var i in check) {
             result = check[i](i) && result;
@@ -108,13 +106,13 @@ function showInscription() {
         if (result) {
             alert('Inscription en cours');
             $.ajax({
-                url : 'http://129.88.57.70:8080/api/utilisateur/',
+                url : 'http://129.88.57.61:8080/api/utilisateur/',
                 type : 'POST',
                 dataType : 'json',
                 contentType: 'application/x-www-form-urlencoded',
                 success : function(data, statut){
                     console.log("ouverture de la socket");
-                    var socket = io.connect('http://129.88.57.70:8080');
+                    var socket = io.connect('http://129.88.57.61:8080');
                     socket.emit('nouvelle_connexion', 0614021053);
                     return true;
                 }

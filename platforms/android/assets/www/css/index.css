@@ -123,6 +123,15 @@ h1 {
     text-align: center;
 }
 
+.btn-group {
+    display: inline-block;
+    margin-right: 15px;
+    padding: 3px 0px;
+    width: 200px;
+    min-height: 1px;
+    text-align: center;
+}
+
 input {
     padding: 2px;
     border: 1px solid #CCC;
