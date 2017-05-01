@@ -18,6 +18,7 @@ io.sockets.on('connection', function (socket) {
     var id = socket.id;
     socket.on('nouvelle_connexion', function(numero) {
         fonctions.addConnectedUser(numero, id);
+        fonctions.getMessages(numero, id);
     })
 });
 
