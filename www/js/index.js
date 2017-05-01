@@ -100,7 +100,7 @@ function showInscription() {
             check[e.target.id](e.target.id); // "e.target" représente l'input actuellement modifié
         });
     }
-    document.getElementsByClassName('form_col').addEventListener("submit", function(event){
+    document.getElementById('userInscription').addEventListener("click", function(event){
         var result = true;
         for (var i in check) {
             result = check[i](i) && result;
