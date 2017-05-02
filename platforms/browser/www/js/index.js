@@ -20,15 +20,15 @@
 // Application Constructor
 document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
 var check={};
-
-
+var socket;
+var adr='http://129.88.57.90:8080';
 
 // deviceready Event Handler
 //
 // Bind any cordova events here. Common events are:
 // 'pause', 'resume', etc.
 function onDeviceReady() {
-    document.getElementById("Connection").onclick = showConnection;
+    $("#Connection").on("click", showConnection());
     document.getElementById("Inscription").onclick = showInscription;
 }
 
@@ -46,34 +46,43 @@ function showConnection() {
         });
     }
     document.getElementById('userConnection').addEventListener("click", function(event){
+        event.preventDefault()
         var result = true;
         result = check['numero']('numero') && result;
-        result = result && isUser(document.getElementById('numero').value);
+        console.log("result : " + result);
         if (result) {
-            alert('Connection en cours');
-            document.location.href="mainpage.html";
+            isUser(document.getElementById('numero').value);
         }
-        else {
-            alert('Numero inconnu');
-            showConnection();
-        }
-        event.preventDefault()
+        
     });
     deactivateTooltips();
 }
 
+function successConnexion(tel) {
+    alert('Connection en cours');
+    document.location.href="mainpage.html";
+    console.log("connexion socket");
+    socket = io.connect(adr);
+    console.log("telephone : " + tel);
+    socket.emit('nouvelle_connexion', tel);
+}
+
+
+
+
 function isUser(value) {
     $.ajax({
-        url : 'http://localhost:8080/api/utilisateur/' + value,
+        url : adr + '/api/utilisateur/' + value,
         type : 'GET',
         dataType : 'json',
-        success : function(data, statut){
-            alert(data);
-            alert(statut);
-            return true;
-        }
+        success : function(){
+            successConnexion(value);
+        },
+        error : function() {
+            alert('Numero inconnu');
+            showConnection();
+        } 
     });
-    return false;
 }
 
 function showInscription() {
@@ -105,19 +114,28 @@ function showInscription() {
         }
         if (result) {
             alert('Inscription en cours');
+            var tel = document.getElementById('numero').value;
+            var dataa = "numero=" + tel;
+            dataa += "&nom=" + document.getElementById('nom').value;
+            dataa += "&prenom=" + document.getElementById('prenom').value;
+            dataa += "&username=" + document.getElementById('pseudo').value;
+            alert(dataa);
             $.ajax({
-                url : 'http://129.88.57.61:8080/api/utilisateur/',
+                url : adr + '/api/utilisateur/',
                 type : 'POST',
-                dataType : 'json',
+                data : dataa,
                 contentType: 'application/x-www-form-urlencoded',
-                success : function(data, statut){
-                    console.log("ouverture de la socket");
-                    var socket = io.connect('http://129.88.57.61:8080');
-                    socket.emit('nouvelle_connexion', 0614021053);
-                    return true;
+                success : function(){
+                    successConnexion(tel);
+                },
+                error : function(xhr, status, erreur){
+                    alert(xhr.responseText);
+                    alert(xhr.status);
+                    alert(status);
+                    alert(erreur);
+                    alert('non');
                 }
             });
-            $(this).serialize()
         }
         else {
             alert('Erreur dans le formulaire');
@@ -125,31 +143,6 @@ function showInscription() {
         }
         event.preventDefault();
     });
-    /*document.getElementById('userInscription').addEventListener("submit", function(event){
-        var result = true;
-        for (var i in check) {
-            result = check[i](i) && result;
-        }
-        if (result) {
-            alert('Inscription en cours');
-            $.ajax({
-                url : '/api/utilisateur/',
-                type : 'POST',
-                dataType : 'json',
-                contentType: 'application/x-www-form-urlencoded',
-                success : function(data, statut){
-                    return true;
-                }
-            });
-            $(this).serialize()
-            inscription();
-        }
-        else {
-            alert('Erreur dans le formulaire');
-            showInscription();
-        }
-        event.preventDefault();
-    });*/
     deactivateTooltips();
 }
 

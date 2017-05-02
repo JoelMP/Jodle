@@ -64,7 +64,7 @@ function showConnection() {
 
 function isUser(value) {
     $.ajax({
-        url : 'http://localhost:8080/api/utilisateur/' + value,
+        url : 'http://129.88.57.59:8080/api/utilisateur/' + value,
         type : 'GET',
         dataType : 'json',
         success : function(data, statut){
@@ -105,19 +105,33 @@ function showInscription() {
         }
         if (result) {
             alert('Inscription en cours');
+            var dataa = "numero=" + document.getElementById('numero').value;
+            dataa += "&nom=" + document.getElementById('nom').value;
+            dataa += "&prenom=" + document.getElementById('prenom').value;
+            dataa += "&username=" + document.getElementById('pseudo').value;
+            alert(dataa);
             $.ajax({
                 url : 'http://129.88.57.61:8080/api/utilisateur/',
                 type : 'POST',
-                dataType : 'json',
+                data : dataa,
                 contentType: 'application/x-www-form-urlencoded',
                 success : function(data, statut){
                     console.log("ouverture de la socket");
                     var socket = io.connect('http://129.88.57.61:8080');
                     socket.emit('nouvelle_connexion', 0614021053);
-                    return true;
+                    alert(statut);
+                    alert(data);
+                    alert('oui');
+                    document.location.href="mainpage.html";
+                },
+                error : function(xhr, status, erreur){
+                    alert(xhr.responseText);
+                    alert(xhr.status);
+                    alert(status);
+                    alert(erreur);
+                    alert('non');
                 }
             });
-            $(this).serialize()
         }
         else {
             alert('Erreur dans le formulaire');
@@ -125,31 +139,6 @@ function showInscription() {
         }
         event.preventDefault();
     });
-    /*document.getElementById('userInscription').addEventListener("submit", function(event){
-        var result = true;
-        for (var i in check) {
-            result = check[i](i) && result;
-        }
-        if (result) {
-            alert('Inscription en cours');
-            $.ajax({
-                url : '/api/utilisateur/',
-                type : 'POST',
-                dataType : 'json',
-                contentType: 'application/x-www-form-urlencoded',
-                success : function(data, statut){
-                    return true;
-                }
-            });
-            $(this).serialize()
-            inscription();
-        }
-        else {
-            alert('Erreur dans le formulaire');
-            showInscription();
-        }
-        event.preventDefault();
-    });*/
     deactivateTooltips();
 }
 
