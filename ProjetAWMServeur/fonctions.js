@@ -6,14 +6,15 @@ function addUser(req, res) {
     var nom = req.body.nom;
     var prenom = req.body.prenom;
     var numero = req.body.numero;
-    var localisation = req.body.localisation;
+    //var localisation = req.body.localisation;
     
-    db.addUser(username, nom, prenom, numero, localisation, function(error,data)
+    db.addUser(username, nom, prenom, numero, function(error,data)
      {
+         console.log("fonction addUser après requête")
          if (error == null)
          {
-             res.status(200);
-             console.log(data);
+            console.log("addUser data : " + data); 
+            res.sendStatus(200);
          }
          else
          {
@@ -28,12 +29,11 @@ function getUser(req, res) {
     const id = req.params.id;
     
     db.getUser(id, function(error, data) {
+        console.log("erreur getUser : " + error);
+        console.log("data getUser : " + data.numero);
         if (error == null) {
-            res.status(200).json({
-                username : data.username,
-                nom : data.nom,            
-                prenom : data.prenom,            
-                numero : data.numero            
+            res.status(200).json({           
+                num : data.numero            
             })
         } else {
             res.status(500).send("Erreur : " + error);
@@ -43,6 +43,7 @@ function getUser(req, res) {
 
 
 function addConnectedUser(numero, socket) {
+    console.log("addConnectedUser");
     db.addConnectedUser(numero, socket, function(error) {
         if (error == null) {
             console.log("utilisateur connecté")
@@ -81,7 +82,7 @@ function sendMessage(req, res) {
     
 }
 
-function getMessages(numero, ) {
+function getMessages(numero, socket) {
     
     db.getMessages(numero, function(error, data) {
         
@@ -95,10 +96,22 @@ function getMessages(numero, ) {
     })
 }
 
+function deleteConnexion(id) {
+    db.deleteConnectedUser(id, function(error) {
+        
+        if (error == null) {
+            console.log("connexion supprimée");
+        } else {
+            console.log("erreur suppression connexion : " + error);
+        }
+    })
+}
+
 module.exports = {
     addUser,
     getUser,
     addConnectedUser,
     sendMessage,
-    getMessages
+    getMessages,
+    deleteConnexion
 }

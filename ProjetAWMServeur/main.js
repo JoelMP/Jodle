@@ -15,12 +15,20 @@ app.use('/api/', router);
 var io = require('socket.io')(server);
 
 io.sockets.on('connection', function (socket) {
+    console.log("io.sockets.on")
     var id = socket.id;
     socket.on('nouvelle_connexion', function(numero) {
+        console.log("socket.on('nouvelle_connexion')")
         fonctions.addConnectedUser(numero, id);
         fonctions.getMessages(numero, id);
     })
+    
+    socket.on('disconnect', function() {
+        fonctions.deleteConnexion(id);
+    })
 });
+
+
 
 
 server.listen(8080); // démarrage du serveur sur le port 8080
