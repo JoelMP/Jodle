@@ -33,7 +33,7 @@ function getUser(req, res) {
         console.log("data getUser : " + data.numero);
         if (error == null) {
             res.status(200).json({           
-                num : data.numero            
+                num : data.numero 
             })
         } else {
             res.status(500).send("Erreur : " + error);
