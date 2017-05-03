@@ -29,31 +29,29 @@ var  storage = window.sessionStorage;
 // Bind any cordova events here. Common events are:
 // 'pause', 'resume', etc.
 function onDeviceReady() {
-    document.getElementById("Connection").onclick = showConnection;
-    //$("#Connection").on("click", showConnection());
-    document.getElementById("Inscription").onclick = showInscription;
+    $('#Connection').on("click", showConnection);
+    $('#Inscription').on("click", showInscription);
 }
 
 function showConnection() {
-    document.getElementById('myForm').innerHTML =
-        '<label class="form_col" for="numero">Numero :</label>'
+    $('#myForm').html('<label class="form_col" for="numero">Numero :</label>'
         + '<input name="numero" id="numero" type="text" />'
         + '<span class="tooltip">Un numéro est composé de 10 chiffres</span>'
-        + '<span class="form_col"></span> <input type="submit" id="userConnection" value="Connection" />';
+        + '<span class="form_col"></span> <input type="submit" id="userConnection" value="Connection" />');
     var inputs = document.querySelectorAll('input[type=text], input[type=password]'),
         inputsLength = inputs.length;
     for (var i = 0; i < inputsLength; i++) {
         inputs[i].addEventListener('keyup', function (e) {
-            check[e.target.id](e.target.id); // "e.target" représente l'input actuellement modifié
+            check[e.target.id](e.target.id);
         });
     }
-    document.getElementById('userConnection').addEventListener("click", function(event){
+    $('#userConnection').on("click", function(event){
         event.preventDefault()
         var result = true;
         result = check['numero']('numero') && result;
         console.log("result : " + result);
         if (result) {
-            isUser(document.getElementById('numero').value);
+            isUser($('#numero').val());
         }
         
     });
@@ -86,8 +84,7 @@ function isUser(value) {
 }
 
 function showInscription() {
-    document.getElementById('myForm').innerHTML =
-        '<label class="form_col" for="numero">Numero :</label>'
+    $('#myForm').html('<label class="form_col" for="numero">Numero :</label>'
         + '<input name="numero" id="numero" type="text" />'
         + '<span class="tooltip">Un numéro est composé de 10 chiffres</span>'
         + '<label class="form_col" for="pseudo">Pseudo :</label>'
@@ -99,7 +96,7 @@ function showInscription() {
         + '<label class="form_col" for="prenom">Prenom :</label>'
         + '<input name="prenom" id="prenom" type="text" />'
         + '<span class="tooltip">Un prénom ne peut pas faire moins de 4 caractères</span>'
-        + '<span class="form_col"></span> <input type="submit" id="userInscription" value="Inscription" />';
+        + '<span class="form_col"></span> <input type="submit" id="userInscription" value="Inscription" />');
     var inputs = document.querySelectorAll('input[type=text], input[type=password]'),
         inputsLength = inputs.length;
     for (var i = 0; i < inputsLength; i++) {
@@ -107,18 +104,18 @@ function showInscription() {
             check[e.target.id](e.target.id); // "e.target" représente l'input actuellement modifié
         });
     }
-    document.getElementById('userInscription').addEventListener("click", function(event){
+    $('#userInscription').on("click", function(event){
         var result = true;
         for (var i in check) {
             result = check[i](i) && result;
         }
         if (result) {
             console.log('Inscription en cours');
-            var tel = document.getElementById('numero').value;
+            var tel = $('#numero').val();
             var dataa = "numero=" + tel;
-            dataa += "&nom=" + document.getElementById('nom').value;
-            dataa += "&prenom=" + document.getElementById('prenom').value;
-            dataa += "&username=" + document.getElementById('pseudo').value;
+            dataa += "&nom=" + $('#nom').val();
+            dataa += "&prenom=" + $('#prenom').val();
+            dataa += "&username=" + $('#pseudo').val();
             console.log(dataa);
             $.ajax({
                 url : adr + '/api/utilisateur/',
