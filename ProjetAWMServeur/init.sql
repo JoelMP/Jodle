@@ -57,7 +57,7 @@ ALTER TABLE ONLY Utilisateurs
 
 CREATE TABLE connexions (
     numero varchar(10) NOT NULL,
-    socket varchar(10) NOT NULL,
+    socket varchar(40) NOT NULL,
     PRIMARY KEY (numero),
     FOREIGN KEY (numero) REFERENCES utilisateurs(numero)
 );

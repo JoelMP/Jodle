@@ -17,8 +17,7 @@ function addUser(req, res) {
          }
          else
          {
-             console.log('error');
-             console.log(error);
+             console.log("erreur add user : " + error);
              res.status(500).send(error);
          }
     })
@@ -45,7 +44,7 @@ function getUser(req, res) {
 
 
 function addConnectedUser(numero, socket) {
-    db.addConnectedUser(numero, socket, function(error, data) {
+    db.addConnectedUser(numero, socket, function(error) {
         if (error == null) {
             console.log("utilisateur connecté")
         } else {
@@ -55,9 +54,52 @@ function addConnectedUser(numero, socket) {
     console.log(numero);
 }
 
+function sendMessage(req, res) {
+    
+    var contact;
+    var message = req.body.message;
+    
+    //Pour chaque numéro du répertoire :
+    db.existingContact(contact, function(error, socket) {
+        
+        if (error == null) {
+            io.sockets.connected[socket].emit('message', message);
+            console.log("message envoyé");
+            res.sendStatus(200);
+            
+        } else {
+            db.addMessage(contact, message, function(error) {
+                if (error == null) {
+                    console.log("message ajouté");
+                    res.sendStatus(200);
+                } else {
+                    console.log("erreur ajout message : " + error);
+                    res.status(500).send(error);
+                }
+            })
+        }
+    })
+    
+}
+
+function getMessages(numero, ) {
+    
+    db.getMessages(numero, function(error, data) {
+        
+        if (error == null) {
+            for (var i=0; i<data.length; i++) {
+                var message = data[i].message;
+                console.log(message);
+                io.sockets.connected[socket].emit('message', message);
+            }
+        }
+    })
+}
 
 module.exports = {
     addUser,
     getUser,
-    addConnectedUser
+    addConnectedUser,
+    sendMessage,
+    getMessages
 }

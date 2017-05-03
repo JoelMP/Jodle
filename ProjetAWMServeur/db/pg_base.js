@@ -10,9 +10,11 @@ function getUser(contact, callback)
     
     db.any(requete, null)
             .then(function (data)  {
+                console.log("requête ok")
                 callback(null, data)
     })
             .catch(function(error)  {
+                console.log("requête pas ok")
                 callback(error, null)
     })    
 }
@@ -20,7 +22,7 @@ function getUser(contact, callback)
 
 function addUser(username, nom, prenom, numero, localisation, callback)
 {
-    var requete = `INSERT INTO utilisateurs VALUES ('${username}', '${nom}', '${prenom}', '${numero}', ST_GeomFromText('POINT(0 0)', 26910))`;
+    var requete = `INSERT INTO utilisateurs (username, nom, prenom, numero) VALUES ('${username}', '${nom}', '${prenom}', '${numero}', '${localisation}')`;
     console.log("nouvel utilisateur : " + requete);
     
     db.none(requete, null)
@@ -33,17 +35,17 @@ function addUser(username, nom, prenom, numero, localisation, callback)
 }
 
 
-function addConnectedUser(numero, socket, callback)
+function addConnectedUser(num, sock, callback)
 {
-    var requete = `INSERT INTO connexions VALUES ('${numero}', '${socket}')`;
+    var requete = `INSERT INTO connexions (numero, socket) VALUES ('${num}', '${sock}')`;
     console.log("nouvelle connexion : " + requete);
     
     db.none(requete, null)
-            .then(function (data)  {
-                callback(null, data);
+            .then(function ()  {
+                callback(null);
     })
             .catch(function(error)  {
-                callback(error, null);
+                callback(error);
     })    
 }
 
@@ -65,7 +67,7 @@ function deleteConnectedUser(numero, callback)
 
 function addMessage(numero, message, callback)
 {
-    var requete = `INSERT INTO messages VALUES (${numero}, ${message})`;
+    var requete = `INSERT INTO messages (numero, message) VALUES ('${numero}', '${message}')`;
     console.log("nouveau message : " + requete);
     
     db.none(requete, null)
@@ -79,8 +81,8 @@ function addMessage(numero, message, callback)
 
 function deleteMessage(numero, socket, callback)
 {
-    var requete = `INSERT INTO connexions VALUES (${numero}, ${socket})`;
-    console.log("nouvelle connexion : " + requete);
+    var requete = `DELETE FROM messages WHERE numero=${numero}`;
+    console.log("supprimer connexion : " + requete);
     
     db.none(requete, null)
             .then(function (data)  {
@@ -91,6 +93,32 @@ function deleteMessage(numero, socket, callback)
     })    
 }
 
+function existingContact(numero, callback) {
+    var requete = `SELECT socket FROM connexions WHERE numero=${numero}`;
+    console.log("check contact : " + requete);
+    
+    db.one(requete, null)
+            .then(function (data) {
+                callback(null, data);
+    })
+            .catch(function(error) {
+                callback(error, null);
+    })
+}
+
+function getMessages(numero, callback) {
+    var requete = `SELECT message FROM messages WHERE numero=${numero}`
+    console.log("messages : " + requete);
+    
+    db.any(requete, null)
+            .then(function (data) {
+                callback(null, data);
+    })
+            .catch(function(error) {
+                callback(error, null);
+    })
+}
+
 
 module.exports = {
     getUser,
@@ -98,5 +126,7 @@ module.exports = {
     addConnectedUser,
     addMessage,
     deleteConnectedUser,
-    deleteMessage
-};
+    deleteMessage,
+    existingContact,
+    getMessages
+}
