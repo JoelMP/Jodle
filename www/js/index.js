@@ -21,7 +21,7 @@
 document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
 var check={};
 var socket;
-var adr='http://129.88.57.97:8080';
+var adr='http://129.88.242.113:8080';
 var  storage = window.sessionStorage;
 
 // deviceready Event Handler
@@ -61,7 +61,7 @@ function showConnection() {
 }
 
 function successConnexion(tel) {
-    alert('Connection en cours');
+    console.log('Connection en cours');
     storage.setItem("tel", tel);
     document.location.href="mainpage.html";
     //socket.emit('nouvelle_connexion', tel);
@@ -113,13 +113,13 @@ function showInscription() {
             result = check[i](i) && result;
         }
         if (result) {
-            alert('Inscription en cours');
+            console.log('Inscription en cours');
             var tel = document.getElementById('numero').value;
             var dataa = "numero=" + tel;
             dataa += "&nom=" + document.getElementById('nom').value;
             dataa += "&prenom=" + document.getElementById('prenom').value;
             dataa += "&username=" + document.getElementById('pseudo').value;
-            alert(dataa);
+            console.log(dataa);
             $.ajax({
                 url : adr + '/api/utilisateur/',
                 type : 'POST',
@@ -129,11 +129,12 @@ function showInscription() {
                     successConnexion(tel);
                 },
                 error : function(xhr, status, erreur){
-                    alert(xhr.responseText);
-                    alert(xhr.status);
-                    alert(status);
-                    alert(erreur);
-                    alert('non');
+                    console.log(xhr.responseText);
+                    console.log(xhr.status);
+                    console.log(status);
+                    console.log(erreur);
+                    alert('Problèmes de connexions avec la base de données');
+                    showInscription();
                 }
             });
         }
