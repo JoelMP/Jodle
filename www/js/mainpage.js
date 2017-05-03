@@ -18,12 +18,12 @@ function onDeviceReady() {
     socket.emit('nouvelle_connexion', tel);
     $('#Photo').click(function(){
         takePicture();
-    })
+    });
     $('#Message').click(function(){
         $('#myForm').html('<label class="form_col" for="numero">Message :</label>'
                 + '<input name="message" id="message" type="text" />'
                 + '<span class="form_col"></span> <input type="submit" id="sendMessage" value="Envoyer Message" />');
-    })
+    });
     $('#myForm').on('submit', function(e){
         console.log($(this).serialize());
         var fields = [navigator.contacts.fieldType.phoneNumbers];
@@ -35,7 +35,11 @@ function onDeviceReady() {
         console.log(contacts.toString());
         socket.emit('liste_contact', contacts);
         socket.emit("NouveauMessage", $(this).serialize());
+        $('#message_envoye').html('<h5>Votre message a été envoyé : </h5><h5>' + $(this).serialize() + '</h5>');
         e.preventDefault();
+    });
+    socket.on('message', function(data){
+        $('#message_recu').html('<h5>Vous avez un nouveau message : </h5><h5>' + data + '</h5>');
     })
 }
 

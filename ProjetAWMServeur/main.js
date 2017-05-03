@@ -22,7 +22,8 @@ io.sockets.on('connection', function (socket) {
         console.log("socket.on('nouvelle_connexion')")
         fonctions.addConnectedUser(numero, id);
         fonctions.getMessages(numero, id);
-    })
+        socket.emit('message',"test");
+    });
     
     socket.on('disconnect', function() {
         fonctions.deleteConnexion(id);
