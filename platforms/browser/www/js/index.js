@@ -21,14 +21,16 @@
 document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
 var check={};
 var socket;
-var adr='http://129.88.57.90:8080';
+var adr='http://129.88.57.97:8080';
+var  storage = window.sessionStorage;
 
 // deviceready Event Handler
 //
 // Bind any cordova events here. Common events are:
 // 'pause', 'resume', etc.
 function onDeviceReady() {
-    $("#Connection").on("click", showConnection());
+    document.getElementById("Connection").onclick = showConnection;
+    //$("#Connection").on("click", showConnection());
     document.getElementById("Inscription").onclick = showInscription;
 }
 
@@ -60,11 +62,9 @@ function showConnection() {
 
 function successConnexion(tel) {
     alert('Connection en cours');
+    storage.setItem("tel", tel);
     document.location.href="mainpage.html";
-    console.log("connexion socket");
-    socket = io.connect(adr);
-    console.log("telephone : " + tel);
-    socket.emit('nouvelle_connexion', tel);
+    //socket.emit('nouvelle_connexion', tel);
 }
 
 

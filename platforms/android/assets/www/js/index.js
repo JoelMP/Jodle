@@ -20,8 +20,8 @@
 // Application Constructor
 document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
 var check={};
-
-
+var socket;
+var adr='http://129.88.57.97:8080';
 
 // deviceready Event Handler
 //
@@ -29,6 +29,7 @@ var check={};
 // 'pause', 'resume', etc.
 function onDeviceReady() {
     document.getElementById("Connection").onclick = showConnection;
+    //$("#Connection").on("click", showConnection());
     document.getElementById("Inscription").onclick = showInscription;
 }
 
@@ -46,34 +47,40 @@ function showConnection() {
         });
     }
     document.getElementById('userConnection').addEventListener("click", function(event){
+        event.preventDefault()
         var result = true;
         result = check['numero']('numero') && result;
-        result = result && isUser(document.getElementById('numero').value);
+        console.log("result : " + result);
         if (result) {
-            alert('Connection en cours');
-            document.location.href="mainpage.html";
+            isUser(document.getElementById('numero').value);
         }
-        else {
-            alert('Numero inconnu');
-            showConnection();
-        }
-        event.preventDefault()
+        
     });
     deactivateTooltips();
 }
 
+function successConnexion(tel) {
+    alert('Connection en cours');
+    document.location.href="mainpage.html";
+    //socket.emit('nouvelle_connexion', tel);
+}
+
+
+
+
 function isUser(value) {
     $.ajax({
-        url : 'http://129.88.57.59:8080/api/utilisateur/' + value,
+        url : adr + '/api/utilisateur/' + value,
         type : 'GET',
         dataType : 'json',
-        success : function(data, statut){
-            alert(data);
-            alert(statut);
-            return true;
-        }
+        success : function(){
+            successConnexion(value);
+        },
+        error : function() {
+            alert('Numero inconnu');
+            showConnection();
+        } 
     });
-    return false;
 }
 
 function showInscription() {
@@ -105,24 +112,19 @@ function showInscription() {
         }
         if (result) {
             alert('Inscription en cours');
-            var dataa = "numero=" + document.getElementById('numero').value;
+            var tel = document.getElementById('numero').value;
+            var dataa = "numero=" + tel;
             dataa += "&nom=" + document.getElementById('nom').value;
             dataa += "&prenom=" + document.getElementById('prenom').value;
             dataa += "&username=" + document.getElementById('pseudo').value;
             alert(dataa);
             $.ajax({
-                url : 'http://129.88.57.61:8080/api/utilisateur/',
+                url : adr + '/api/utilisateur/',
                 type : 'POST',
                 data : dataa,
                 contentType: 'application/x-www-form-urlencoded',
-                success : function(data, statut){
-                    console.log("ouverture de la socket");
-                    var socket = io.connect('http://129.88.57.61:8080');
-                    socket.emit('nouvelle_connexion', 0614021053);
-                    alert(statut);
-                    alert(data);
-                    alert('oui');
-                    document.location.href="mainpage.html";
+                success : function(){
+                    successConnexion(tel);
                 },
                 error : function(xhr, status, erreur){
                     alert(xhr.responseText);
