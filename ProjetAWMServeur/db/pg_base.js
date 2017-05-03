@@ -5,31 +5,35 @@ var db = pgp(dbconfig);
 
 function getUser(contact, callback)
 {
-    var requete = `select username, nom, prenom, numero, localisation from utilisateurs where numero = ${contact}`;
+    var requete = `select numero from utilisateurs where numero = '${contact}'`;
     console.log(requete);
     
     db.any(requete, null)
             .then(function (data)  {
                 console.log("requête ok")
+                console.log(data);
                 callback(null, data)
     })
             .catch(function(error)  {
                 console.log("requête pas ok")
+                console.log(error);
                 callback(error, null)
     })    
 }
 
 
-function addUser(username, nom, prenom, numero, localisation, callback)
+function addUser(username, nom, prenom, numero, callback)
 {
-    var requete = `INSERT INTO utilisateurs (username, nom, prenom, numero) VALUES ('${username}', '${nom}', '${prenom}', '${numero}', '${localisation}')`;
+    var requete = `INSERT INTO utilisateurs (username, nom, prenom, numero) VALUES ('${username}', '${nom}', '${prenom}', '${numero}')`;
     console.log("nouvel utilisateur : " + requete);
     
     db.none(requete, null)
             .then(function (data)  {
+                console.log("db.none.then addUser");
                 callback(null, data)
     })
             .catch(function(error)  {
+                console.log("db.none.catch addUser");
                 callback(error, null)
     })    
 }
@@ -50,17 +54,17 @@ function addConnectedUser(num, sock, callback)
 }
 
 
-function deleteConnectedUser(numero, callback)
+function deleteConnectedUser(id, callback)
 {
-    var requete = `DELETE FROM connexions WHERE numero=${numero}`;
+    var requete = `DELETE FROM connexions WHERE socket='${id}'`;
     console.log("suppression connexion : " + requete);
     
     db.none(requete, null)
-            .then(function (data)  {
-                callback(null, data)
+            .then(function ()  {
+                callback(null)
     })
             .catch(function(error)  {
-                callback(error, null)
+                callback(error)
     })    
 }
 
