@@ -3,10 +3,11 @@
  */
 document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
 
-var adr='http://129.88.242.113:8080';
+var adr='http://129.88.57.110:8080';
 var socket = io.connect(adr);
 var tel;
 var storage = window.sessionStorage;
+var contacts;
 
 function onDeviceReady() {
     console.log('Mainpage');
@@ -25,12 +26,26 @@ function onDeviceReady() {
     })
     $('#myForm').on('submit', function(e){
         console.log($(this).serialize());
+        var fields = [navigator.contacts.fieldType.phoneNumbers];
+        var options = new ContactFindOptions();
+        options.hasPhoneNumber = true;
+        options.multiple = true;
+        options.desiredFields = [navigator.contacts.fieldType.phoneNumbers];
+        contacts = navigator.contacts.find(fields, onSuccess, onError, options);
+        console.log(contacts.toString());
+        socket.emit('liste_contact', contacts);
         socket.emit("NouveauMessage", $(this).serialize());
         e.preventDefault();
     })
 }
 
-1
+function onSuccess(contacts){
+
+}
+
+function onError(err){
+
+}
 function takePicture() {
     // on  indique  le nom de la  fonction  en cas
     // de  reussite  et en cas d echec

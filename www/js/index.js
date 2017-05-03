@@ -21,7 +21,7 @@
 document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
 var check={};
 var socket;
-var adr='http://129.88.242.113:8080';
+var adr='http://129.88.57.110:8080';
 var  storage = window.sessionStorage;
 
 // deviceready Event Handler
@@ -69,6 +69,7 @@ function successConnexion(tel) {
 
 
 function isUser(value) {
+    console.log('isUser'+value);
     $.ajax({
         url : adr + '/api/utilisateur/' + value,
         type : 'GET',
