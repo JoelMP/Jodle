@@ -1,21 +1,25 @@
 /**
  * Created by joel on 25/04/17.
  */
-document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
 
-var adr='http://129.88.57.110:8080';
+var adr='http://129.88.57.104:8080';
 var socket = io.connect(adr);
 var tel;
 var storage = window.sessionStorage;
 var contacts;
 
-function onDeviceReady() {
+document.addEventListener('deviceready', function() {
     console.log('Mainpage');
     tel = storage.getItem("tel");
     console.log("connexion socket");
     socket = io.connect(adr);
     console.log("telephone : " + tel);
     socket.emit('nouvelle_connexion', tel);
+    var options = new ContactFindOptions();
+    options.hasPhoneNumber = true;
+    options.multiple = true;
+    options.desiredFields = [navigator.contacts.fieldType.phoneNumbers];
+    navigator.contacts.find([navigator.contacts.fieldType.phoneNumbers], onSuccess, onError, options);
     $('#Photo').click(function(){
         takePicture();
     });
@@ -26,30 +30,24 @@ function onDeviceReady() {
     });
     $('#myForm').on('submit', function(e){
         console.log($(this).serialize());
-        var fields = [navigator.contacts.fieldType.phoneNumbers];
-        var options = new ContactFindOptions();
-        options.hasPhoneNumber = true;
-        options.multiple = true;
-        options.desiredFields = [navigator.contacts.fieldType.phoneNumbers];
-        contacts = navigator.contacts.find(fields, onSuccess, onError, options);
-        console.log(contacts.toString());
-        socket.emit('liste_contact', contacts);
-        socket.emit("NouveauMessage", $(this).serialize());
+        console.log(contacts[0].phoneNumbers);
+        socket.emit('Nouveau_message', {contacts: contacts, message: $(this).serialize()});
         $('#message_envoye').html('<h5>Votre message a été envoyé : </h5><h5>' + $(this).serialize() + '</h5>');
         e.preventDefault();
     });
     socket.on('message', function(data){
         $('#message_recu').html('<h5>Vous avez un nouveau message : </h5><h5>' + data + '</h5>');
     })
-}
+})
 
-function onSuccess(contacts){
-
+function onSuccess(conts){
+    contacts = conts;
 }
 
 function onError(err){
-
+    alert("Problème d'accès à la liste des contacts");
 }
+
 function takePicture() {
     // on  indique  le nom de la  fonction  en cas
     // de  reussite  et en cas d echec

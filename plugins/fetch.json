@@ -1,4 +1,12 @@
 {
+    "cordova-plugin-compat": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-compat"
+        },
+        "is_top_level": false,
+        "variables": {}
+    },
     "cordova-plugin-whitelist": {
         "source": {
             "type": "registry",
@@ -10,17 +18,9 @@
     "cordova-plugin-contacts": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-contacts"
+            "id": "cordova-plugin-contacts@~2.3.1"
         },
         "is_top_level": true,
-        "variables": {}
-    },
-    "cordova-plugin-compat": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-compat"
-        },
-        "is_top_level": false,
         "variables": {}
     }
 }

@@ -21,7 +21,7 @@
 document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
 var check={};
 var socket;
-var adr='http://129.88.57.97:8080';
+var adr='http://129.88.57.104:8080';
 var  storage = window.sessionStorage;
 
 // deviceready Event Handler
@@ -29,31 +29,29 @@ var  storage = window.sessionStorage;
 // Bind any cordova events here. Common events are:
 // 'pause', 'resume', etc.
 function onDeviceReady() {
-    document.getElementById("Connection").onclick = showConnection;
-    //$("#Connection").on("click", showConnection());
-    document.getElementById("Inscription").onclick = showInscription;
+    $('#Connection').on("click", showConnection);
+    $('#Inscription').on("click", showInscription);
 }
 
 function showConnection() {
-    document.getElementById('myForm').innerHTML =
-        '<label class="form_col" for="numero">Numero :</label>'
+    $('#myForm').html('<label class="form_col" for="numero">Numero :</label>'
         + '<input name="numero" id="numero" type="text" />'
         + '<span class="tooltip">Un numéro est composé de 10 chiffres</span>'
-        + '<span class="form_col"></span> <input type="submit" id="userConnection" value="Connection" />';
+        + '<span class="form_col"></span> <input type="submit" id="userConnection" value="Connection" />');
     var inputs = document.querySelectorAll('input[type=text], input[type=password]'),
         inputsLength = inputs.length;
     for (var i = 0; i < inputsLength; i++) {
         inputs[i].addEventListener('keyup', function (e) {
-            check[e.target.id](e.target.id); // "e.target" représente l'input actuellement modifié
+            check[e.target.id](e.target.id);
         });
     }
-    document.getElementById('userConnection').addEventListener("click", function(event){
+    $('#userConnection').on("click", function(event){
         event.preventDefault()
         var result = true;
         result = check['numero']('numero') && result;
         console.log("result : " + result);
         if (result) {
-            isUser(document.getElementById('numero').value);
+            isUser($('#numero').val());
         }
         
     });
@@ -61,7 +59,7 @@ function showConnection() {
 }
 
 function successConnexion(tel) {
-    alert('Connection en cours');
+    console.log('Connection en cours');
     storage.setItem("tel", tel);
     document.location.href="mainpage.html";
     //socket.emit('nouvelle_connexion', tel);
@@ -71,6 +69,7 @@ function successConnexion(tel) {
 
 
 function isUser(value) {
+    console.log('isUser'+value);
     $.ajax({
         url : adr + '/api/utilisateur/' + value,
         type : 'GET',
@@ -86,8 +85,7 @@ function isUser(value) {
 }
 
 function showInscription() {
-    document.getElementById('myForm').innerHTML =
-        '<label class="form_col" for="numero">Numero :</label>'
+    $('#myForm').html('<label class="form_col" for="numero">Numero :</label>'
         + '<input name="numero" id="numero" type="text" />'
         + '<span class="tooltip">Un numéro est composé de 10 chiffres</span>'
         + '<label class="form_col" for="pseudo">Pseudo :</label>'
@@ -99,7 +97,7 @@ function showInscription() {
         + '<label class="form_col" for="prenom">Prenom :</label>'
         + '<input name="prenom" id="prenom" type="text" />'
         + '<span class="tooltip">Un prénom ne peut pas faire moins de 4 caractères</span>'
-        + '<span class="form_col"></span> <input type="submit" id="userInscription" value="Inscription" />';
+        + '<span class="form_col"></span> <input type="submit" id="userInscription" value="Inscription" />');
     var inputs = document.querySelectorAll('input[type=text], input[type=password]'),
         inputsLength = inputs.length;
     for (var i = 0; i < inputsLength; i++) {
@@ -107,19 +105,19 @@ function showInscription() {
             check[e.target.id](e.target.id); // "e.target" représente l'input actuellement modifié
         });
     }
-    document.getElementById('userInscription').addEventListener("click", function(event){
+    $('#userInscription').on("click", function(event){
         var result = true;
         for (var i in check) {
             result = check[i](i) && result;
         }
         if (result) {
-            alert('Inscription en cours');
-            var tel = document.getElementById('numero').value;
+            console.log('Inscription en cours');
+            var tel = $('#numero').val();
             var dataa = "numero=" + tel;
-            dataa += "&nom=" + document.getElementById('nom').value;
-            dataa += "&prenom=" + document.getElementById('prenom').value;
-            dataa += "&username=" + document.getElementById('pseudo').value;
-            alert(dataa);
+            dataa += "&nom=" + $('#nom').val();
+            dataa += "&prenom=" + $('#prenom').val();
+            dataa += "&username=" + $('#pseudo').val();
+            console.log(dataa);
             $.ajax({
                 url : adr + '/api/utilisateur/',
                 type : 'POST',
@@ -129,11 +127,12 @@ function showInscription() {
                     successConnexion(tel);
                 },
                 error : function(xhr, status, erreur){
-                    alert(xhr.responseText);
-                    alert(xhr.status);
-                    alert(status);
-                    alert(erreur);
-                    alert('non');
+                    console.log(xhr.responseText);
+                    console.log(xhr.status);
+                    console.log(status);
+                    console.log(erreur);
+                    alert('Problèmes de connexions avec la base de données');
+                    showInscription();
                 }
             });
         }

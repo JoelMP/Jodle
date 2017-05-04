@@ -21,7 +21,7 @@
 document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
 var check={};
 var socket;
-var adr='http://129.88.57.110:8080';
+var adr='http://129.88.57.104:8080';
 var  storage = window.sessionStorage;
 
 // deviceready Event Handler
