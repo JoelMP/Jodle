@@ -10,7 +10,6 @@ router.all('*', function(req, res, next) {
 
 router.get('/utilisateur/:id', fonctions.getUser);
 router.post('/utilisateur/', fonctions.addUser);
-router.post('/message/', fonctions.sendMessage);
 
         
 module.exports = router

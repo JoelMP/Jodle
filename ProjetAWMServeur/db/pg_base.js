@@ -8,7 +8,7 @@ function getUser(contact, callback)
     var requete = `select numero from utilisateurs where numero = '${contact}'`;
     console.log(requete);
     
-    db.any(requete, null)
+    db.one(requete, null)
             .then(function (data)  {
                 console.log("requête ok")
                 console.log(data);
@@ -69,7 +69,7 @@ function deleteConnectedUser(id, callback)
 }
 
 
-function addMessage(numero, message, callback)
+function addMessage(numero, message, source, callback)
 {
     var requete = `INSERT INTO messages (numero, message) VALUES ('${numero}', '${message}')`;
     console.log("nouveau message : " + requete);
@@ -98,14 +98,15 @@ function deleteMessage(numero, socket, callback)
 }
 
 function existingContact(numero, callback) {
-    var requete = `SELECT socket FROM connexions WHERE numero=${numero}`;
+    var requete = `SELECT socket FROM connexions WHERE numero='${numero}'`;
     console.log("check contact : " + requete);
     
     db.one(requete, null)
             .then(function (data) {
-                callback(null, data);
+                callback(null, data.socket);
     })
             .catch(function(error) {
+                console.log("erreur existing user : " + error)
                 callback(error, null);
     })
 }
